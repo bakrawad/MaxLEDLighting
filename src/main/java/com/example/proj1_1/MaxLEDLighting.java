@@ -6,6 +6,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
@@ -132,6 +133,11 @@ public class MaxLEDLighting extends Application {
         scrollPane.setContent(paneLed);
 //        scrollPane.setBackground(new Background(backgroundImage));
 //        scrollPane.setStyle("-fx-background-color: #20588d;");
+        Image gif = new Image("giphy.gif");
+        ImageView imageView = new ImageView(gif);
+        imageView.setLayoutX(-58);
+        imageView.setLayoutY(20);
+        paneLed.getChildren().add(imageView);
         pane.getChildren().add(scrollPane);
 
         btadd.setOnAction(e ->{
@@ -148,6 +154,9 @@ public class MaxLEDLighting extends Application {
 
             int z = Integer.parseInt(txinp.getText());
             int x = Integer.parseInt(txled.getText());
+            if (x==0&&z==0){
+                paneLed.getChildren().add(imageView);
+            }
             if (x<z){
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Error !!");
@@ -232,48 +241,81 @@ public class MaxLEDLighting extends Application {
 
 
         btStart.setOnAction(e ->{//Button to start the Dynamic Algorithm
-            if (Ltxinp.size() == 0 || Ltxled.size()==0){
+
+            if (!CheckTextField(Ltxinp.size(),Ltxled.size())){//to check if you add the TextField
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Error !!");
                 alert.setContentText("Please add the Led's and the Input !!");
                 alert.show();
                 return;
             }
-            for (int i = 0;i<Ltxled.size();i++){//this for loop to check of TextField's of LED's
-                if (Ltxled.get(i).getText().equals("")){//to check if empty
-                    Alert alert = new Alert(Alert.AlertType.ERROR);
-                    alert.setTitle("Error !!");
-                    alert.setContentText("Please Fill the textField's");
-                    alert.show();
-                    return;
-                }
-                if (!ishasInt(Ltxled.get(i).getText())){//to check if it has a correct value
-                    Alert alert = new Alert(Alert.AlertType.ERROR);
-                    alert.setTitle("Error !!");
-                    alert.setContentText("Please put a correct value");
-                    alert.show();
-                    return;
-                }
-
+//            for (int i = 0;i<Ltxled.size();i++){//this for loop to check of TextField's of LED's
+//                if (Ltxled.get(i).getText().equals("")){//to check if empty
+//                    Alert alert = new Alert(Alert.AlertType.ERROR);
+//                    alert.setTitle("Error !!");
+//                    alert.setContentText("Please Fill the textField's");
+//                    alert.show();
+//                    return;
+//                }
+//                if (!ishasInt(Ltxled.get(i).getText())){//to check if it has a correct value
+//                    Alert alert = new Alert(Alert.AlertType.ERROR);
+//                    alert.setTitle("Error !!");
+//                    alert.setContentText("Please put a correct value");
+//                    alert.show();
+//                    return;
+//                }
+//            }
+            if (!CheckTheField(Ltxled)){//this check of TextField's of LED's
+                return;
+            }
+//            for (int i = 0; i < Ltxled.size(); i++) {//to check if it has a repeat number
+//                for (int j = i+1; j < Ltxled.size(); j++) {
+//                    if (Ltxled.get(i).getText().equals(Ltxled.get(j).getText())){
+//                        Alert alert = new Alert(Alert.AlertType.ERROR);
+//                        alert.setTitle("Error !!");
+//                        alert.setContentText("Please Dont repeat the number !!");
+//                        alert.show();
+//                        return;
+//                    }
+//                }
+//            }
+            if(!Duplicat(Ltxled)){//to check if Duplicat
+                return;
             }
 
-            for (int i = 0;i<Ltxinp.size();i++) {//this for loop to check of TextField's of Input's
-                if (Ltxinp.get(i).getText().equals("")) {//to check if empty
-                    Alert alert = new Alert(Alert.AlertType.ERROR);
-                    alert.setTitle("Error !!");
-                    alert.setContentText("Please Fill the textField's");
-                    alert.show();
-                    return;
-                }
-                if (!ishasInt(Ltxinp.get(i).getText())) {//to check if it has a correct value
-                    Alert alert = new Alert(Alert.AlertType.ERROR);
-                    alert.setTitle("Error !!");
-                    alert.setContentText("Please put a correct value");
-                    alert.show();
-                    return;
-                }
+//            for (int i = 0;i<Ltxinp.size();i++) {//this for loop to check of TextField's of Input's
+//                if (Ltxinp.get(i).getText().equals("")) {//to check if empty
+//                    Alert alert = new Alert(Alert.AlertType.ERROR);
+//                    alert.setTitle("Error !!");
+//                    alert.setContentText("Please Fill the textField's");
+//                    alert.show();
+//                    return;
+//                }
+//                if (!ishasInt(Ltxinp.get(i).getText())) {//to check if it has a correct value
+//                    Alert alert = new Alert(Alert.AlertType.ERROR);
+//                    alert.setTitle("Error !!");
+//                    alert.setContentText("Please put a correct value");
+//                    alert.show();
+//                    return;
+//                }
+//            }
+//            for (int i = 0; i < Ltxinp.size(); i++) {//to check if it has a repeat number
+//                for (int j = i+1; j < Ltxinp.size(); j++) {
+//                    if (Ltxinp.get(i).getText().trim().equals(Ltxinp.get(j).getText().trim())){
+//                        Alert alert = new Alert(Alert.AlertType.ERROR);
+//                        alert.setTitle("Error !!");
+//                        alert.setContentText("Please Dont repeat the number !!");
+//                        alert.show();
+//                        return;
+//                    }
+//                }
+//            }
+            if (!CheckTheField(Ltxinp)){//this check of TextField's of LED's
+                return;
             }
-
+            if (!Duplicat(Ltxinp)){//to check if Duplicat
+                return;
+            }
 
 
             int x[] = new int[Ltxinp.size()];
@@ -311,6 +353,12 @@ public class MaxLEDLighting extends Application {
             txLed.setText(led);
             AreaDp.clear();
 
+
+            AreaDp.appendText("        ");
+            for (int i =0;i<y.length;i++){
+                AreaDp.appendText(y[i]+" ");
+            }
+            AreaDp.appendText("\n");
             for (int i =0;i<c.length;i++){ //to print the DP Table
                 AreaDp.appendText(i+"   ");
                 for (int j = 0;j<c[i].length;j++){
@@ -320,17 +368,15 @@ public class MaxLEDLighting extends Application {
             }
             AreaDp.appendText("\n");
             AreaDp.appendText("__________________________________");
-            AreaDp.appendText("\n");
+            AreaDp.appendText("\n\n");
             for (int i =0;i<c.length;i++){//to print the DP Table
                 AreaDp.appendText(i+"   ");
                 for (int j = 0;j<c[i].length;j++){
-                    AreaDp.appendText(p[i][j]+" ");
+                    AreaDp.appendText("|"+p[i][j]+"|"+" ");
                 }
                 AreaDp.appendText("\n");
             }
-
             /*
-
                 ArrayList<TextField> Ltxled = new ArrayList<>();
                 ArrayList<TextField> Ltxinp = new ArrayList<>();
              */
@@ -340,8 +386,6 @@ public class MaxLEDLighting extends Application {
                     for (int u = 0; u < r.size(); u++) {
                         if ((r.get(u) + "").equals(Ltxled.get(j).getText())) {
                             if (Ltxinp.get(i).getText().equals(Ltxled.get(j).getText())) {
-                                System.out.println("h6");
-                                System.out.println(Ltxinp.get(i).getLayoutX());
                                 Line l = new Line();
                                 l.setStroke(Color.GREEN);
                                 l.setStrokeWidth(3);
@@ -434,7 +478,7 @@ public class MaxLEDLighting extends Application {
 
         Scene scene = new Scene(pane,1280,620);
         stage.setScene(scene);
-        stage.setTitle("Hello!");
+        stage.setTitle("Max LED Light!");
         stage.show();
     }
 
@@ -454,7 +498,6 @@ public class MaxLEDLighting extends Application {
         int n = y.length;
 
         int[][] c = new int[m + 1][n + 1];
-        String[][] p = new String[m+1][n+1];
         for (int i = 1; i <= m; i++)
             c[i][0] = 0;
 
@@ -466,15 +509,11 @@ public class MaxLEDLighting extends Application {
             for (int j = 1; j <= n; j++) {
                 if (x[i-1] == y[j-1] ) {
                     c[i][j] = c[i - 1][j - 1] + 1;
-                    p[i][j]= "upLeft";
                 } else {
                     if (c[i][j - 1] >= c[i - 1][j]) {
                         c[i][j] = c[i][j - 1];
-                        p[i][j] = "left";
                     } else {
                         c[i][j] = c[i - 1][j];
-                        p[i][j]="up";
-
                     }
                 }
             }
@@ -498,16 +537,23 @@ public class MaxLEDLighting extends Application {
             for (int j = 1; j <= n; j++) {
                 if (x[i-1] == y[j-1] ) {
                     c[i][j] = c[i - 1][j - 1] + 1;
-                    p[i][j]= "upLeft";
+                    p[i][j]= "T";
                 } else {
                     if (c[i][j - 1] >= c[i - 1][j]) {
                         c[i][j] = c[i][j - 1];
-                        p[i][j] = "left";
+                        p[i][j] = "L";
                     } else {
                         c[i][j] = c[i - 1][j];
-                        p[i][j]="up";
+                        p[i][j]="U";
 
                     }
+                }
+            }
+        }
+        for (int i = 0; i < p.length ; i++) {
+            for (int j = 0; j <p[i].length ; j++) {
+                if (p[i][j]==null){
+                    p[i][j]="E";
                 }
             }
         }
@@ -522,12 +568,12 @@ public class MaxLEDLighting extends Application {
             if (i == 0 || j==0){
                 break;
             }
-            if (p[i][j].equals("upLeft")){
+            if (p[i][j].equals("T")){
                 res.add(0,x[i-1]);
                 i=i-1;
                 j=j-1;
             }
-            else if (p[i][j].equals("up")){
+            else if (p[i][j].equals("U")){
                 i=i-1;
             }else {
                 j=j-1;
@@ -536,5 +582,45 @@ public class MaxLEDLighting extends Application {
         return res;
     }
 
+    private static boolean CheckTextField(int x,int y){//to check if you add the TextField
+        if (x == 0 || y==0)
+            return false;
+        return true;
+    }
+
+    private static boolean CheckTheField(ArrayList<TextField> x){ //this Method check of TextField's of LED's
+        for (int i = 0;i<x.size();i++){
+            if (x.get(i).getText().equals("")){//to check if empty
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error !!");
+                alert.setContentText("Please Fill the textField's");
+                alert.show();
+                return false;
+            }
+            if (!ishasInt(x.get(i).getText())){//to check if it has a correct value
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error !!");
+                alert.setContentText("Please put a correct value");
+                alert.show();
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private static boolean Duplicat (ArrayList<TextField> x){//this method to check if it has a Duplicat number
+        for (int i = 0; i < x.size(); i++) {
+            for (int j = i+1; j < x.size(); j++) {
+                if (x.get(i).getText().equals(x.get(j).getText())){
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Error !!");
+                    alert.setContentText("Please Dont repeat the number !!");
+                    alert.show();
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
 
 }
