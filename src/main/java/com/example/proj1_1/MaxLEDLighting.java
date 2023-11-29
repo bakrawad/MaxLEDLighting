@@ -21,6 +21,8 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class MaxLEDLighting extends Application {
     @Override
@@ -58,9 +60,11 @@ public class MaxLEDLighting extends Application {
         TextArea AreaDp = new TextArea();
         varea.getChildren().add(AreaDp);
         AreaDp.setMaxSize(400,200);
+        AreaDp.setEditable(false);
         varea.setLayoutX(850);
         varea.setLayoutY(420);
         pane.getChildren().add(varea);
+        varea.setVisible(false);
        // pane.add(varea,80,54);
         Label lbarea = new Label("            The DP Table");
         lbarea.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 15));
@@ -68,6 +72,7 @@ public class MaxLEDLighting extends Application {
         lbarea.setLayoutX(930);
         lbarea.setLayoutY(395);
         pane.getChildren().add(lbarea);
+        lbarea.setVisible(false);
        // pane.add(lbarea,80,53);
 
         //create Label of Result
@@ -77,6 +82,8 @@ public class MaxLEDLighting extends Application {
         Label lbLed = new Label("The Expected LED's ");
         TextArea txExpected = new TextArea();
         TextArea txLed = new TextArea();
+        txLed.setEditable(false);
+        txExpected.setEditable(false);
         lbExpected.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 15));
         lbExpected.setStyle("-fx-text-fill: white;");
         lbLed.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 15));
@@ -89,6 +96,7 @@ public class MaxLEDLighting extends Application {
         txLed.setPrefSize(250,20);
         HBox hBox = new HBox(10);
         hBox.getChildren().addAll(vlabel,vtex);
+        hBox.setVisible(false);
         hBox.setLayoutX(800);
         hBox.setLayoutY(300);
         pane.getChildren().add(hBox);
@@ -99,6 +107,7 @@ public class MaxLEDLighting extends Application {
         btadd.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR , 13));
         btadd.setOnMouseEntered(e -> btadd.setStyle("-fx-background-color: #010a2a; -fx-text-fill: white; -fx-padding: 10 20;"));
         btadd.setOnMouseExited(e -> btadd.setStyle("-fx-background-color: #20588d;-fx-text-fill: white;-fx-padding: 10 20;"));
+
         TextField txled = new TextField();
         TextField txinp = new TextField();
         txled.setPadding(new Insets(10,20,10,10));
@@ -120,10 +129,16 @@ public class MaxLEDLighting extends Application {
         vBox1.setAlignment(Pos.TOP_CENTER);
         VBox vtxled = new VBox(10);
 
-        //Button of add TextBox on LED and Input
+        //Button of add TextBox on LED and Input and Random
         ArrayList<TextField> Ltxled = new ArrayList<>();
         ArrayList<TextField> Ltxinp = new ArrayList<>();
         VBox vtxinp = new VBox(10);
+
+        Button btRandom = new Button("Random");
+        btRandom.setStyle("-fx-background-color: #20588d;-fx-text-fill: white;-fx-padding: 10 20;");
+        btRandom.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR , 13));
+        btRandom.setOnMouseEntered(e -> btRandom.setStyle("-fx-background-color: #010a2a; -fx-text-fill: white; -fx-padding: 10 20;"));
+        btRandom.setOnMouseExited(e -> btRandom.setStyle("-fx-background-color: #20588d;-fx-text-fill: white;-fx-padding: 10 20;"));
 
         Pane paneLed = new Pane();
         ScrollPane scrollPane = new ScrollPane();
@@ -131,6 +146,10 @@ public class MaxLEDLighting extends Application {
         scrollPane.setLayoutY(150);
         scrollPane.setPrefSize(350,400);
         scrollPane.setContent(paneLed);
+        btRandom.setLayoutX(410);
+        btRandom.setLayoutY(150);
+        pane.getChildren().add(btRandom);
+        btRandom.setVisible(false);
 //        scrollPane.setBackground(new Background(backgroundImage));
 //        scrollPane.setStyle("-fx-background-color: #20588d;");
         Image gif = new Image("giphy.gif");
@@ -139,9 +158,30 @@ public class MaxLEDLighting extends Application {
         imageView.setLayoutY(20);
         paneLed.getChildren().add(imageView);
         pane.getChildren().add(scrollPane);
+        scrollPane.setVisible(false);
+
+        txled.setOnKeyTyped(e ->{
+            String s = e.getText();
+            if (!ishasInt(txled.getText())||Integer.parseInt(txled.getText())<0){
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error !!");
+                alert.setContentText("Please Enter a Number !!");
+                alert.show();
+                txled.clear();
+                return;
+            }else {
+                txinp.setText(txled.getText());
+            }
+
+
+        });
+        AtomicBoolean flag = new AtomicBoolean(false);
 
         btadd.setOnAction(e ->{
             paneLed.getChildren().clear();
+            txLed.clear();
+            txExpected.clear();
+            AreaDp.clear();
             if (!ishasInt(txled.getText())||!ishasInt(txinp.getText())){
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Error !!");
@@ -154,6 +194,8 @@ public class MaxLEDLighting extends Application {
 
             int z = Integer.parseInt(txinp.getText());
             int x = Integer.parseInt(txled.getText());
+            txled.clear();
+            txinp.clear();
             if (x==0&&z==0){
                 paneLed.getChildren().add(imageView);
             }
@@ -165,18 +207,30 @@ public class MaxLEDLighting extends Application {
                 txled.clear();
                 txinp.clear();
                 return;
-
             }
+            if (x<0||z<0){
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error !!");
+                alert.setContentText("The Number Is Smaller than Zero !!");
+                alert.show();
+                txled.clear();
+                txinp.clear();
+                return;
+            }
+            scrollPane.setVisible(true);
+            btRandom.setVisible(true);
             Ltxled.clear();
             vtxled.getChildren().clear();
+
             for (int i = 0 ; i < x ; i++){
                 TextField ti = new TextField();
                 ti.setPrefSize(35,35);
                 ti.setMaxWidth(35);
                 ti.setMaxHeight(35);
                 Ltxled.add(ti);
-
+                flag.set(true);
             }
+
 
 //            vtxled.setLayoutX(50);
 //            vtxled.setLayoutY(150);
@@ -235,6 +289,7 @@ public class MaxLEDLighting extends Application {
 //        hboxleds.setAlignment(Pos.TOP_CENTER);
 //        vtxinp.setAlignment(Pos.CENTER);
 //        vtxled.setAlignment(Pos.CENTER);
+
 
 
 
@@ -316,6 +371,10 @@ public class MaxLEDLighting extends Application {
             if (!Duplicat(Ltxinp)){//to check if Duplicat
                 return;
             }
+            flag.set(false);
+            hBox.setVisible(true);
+            varea.setVisible(true);
+            lbarea.setVisible(true);
 
 
             int x[] = new int[Ltxinp.size()];
@@ -354,25 +413,32 @@ public class MaxLEDLighting extends Application {
             AreaDp.clear();
 
 
-            AreaDp.appendText("        ");
+            AreaDp.appendText("             ");//to print the DP Table
+            AreaDp.appendText("\t");
             for (int i =0;i<y.length;i++){
-                AreaDp.appendText(y[i]+" ");
+                AreaDp.appendText(y[i]+"\t");
             }
             AreaDp.appendText("\n");
-            for (int i =0;i<c.length;i++){ //to print the DP Table
-                AreaDp.appendText(i+"   ");
+            for (int i =0;i<c.length;i++){
+                AreaDp.appendText(i+"\t");
                 for (int j = 0;j<c[i].length;j++){
-                    AreaDp.appendText(c[i][j]+" ");
+                    AreaDp.appendText(c[i][j]+"\t| ");
                 }
                 AreaDp.appendText("\n");
             }
             AreaDp.appendText("\n");
             AreaDp.appendText("__________________________________");
             AreaDp.appendText("\n\n");
-            for (int i =0;i<c.length;i++){//to print the DP Table
-                AreaDp.appendText(i+"   ");
+            AreaDp.appendText("             ");
+            AreaDp.appendText("\t");
+            for (int i =0;i<y.length;i++){
+                AreaDp.appendText(y[i]+"\t");
+            }
+            AreaDp.appendText("\n");
+            for (int i =0;i<c.length;i++){ //to print the DP Table
+                AreaDp.appendText(i+"\t");
                 for (int j = 0;j<c[i].length;j++){
-                    AreaDp.appendText("|"+p[i][j]+"|"+" ");
+                    AreaDp.appendText(p[i][j]+"\t|");
                 }
                 AreaDp.appendText("\n");
             }
@@ -400,6 +466,34 @@ public class MaxLEDLighting extends Application {
                 }
             }
         });
+
+        btRandom.setOnAction(e ->{//Button to set Random of Number of Led
+            if (!flag.get()){
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error !!");
+                alert.setContentText("Please add New Element !!");
+                alert.show();
+                return;
+            }
+            if (!CheckTextField(Ltxinp.size(),Ltxled.size())){//to check if you add the TextField
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error !!");
+                alert.setContentText("Please add the Led's and the Input !!");
+                alert.show();
+                return;
+            }
+            int x = Ltxled.size();
+            ArrayList<Integer>ListOfRandom = new ArrayList<>();
+            for (int i = 1; i <= x ; i++) {
+                ListOfRandom.add(i);
+            }
+            Collections.shuffle(ListOfRandom);
+            for (int i = 0; i < Ltxled.size(); i++) {
+                Ltxled.get(i).setText(ListOfRandom.get(i)+"");
+            }
+        });
+
+
 
         btRead.setOnAction(e ->{
             FileChooser fc = new FileChooser();
@@ -601,6 +695,13 @@ public class MaxLEDLighting extends Application {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Error !!");
                 alert.setContentText("Please put a correct value");
+                alert.show();
+                return false;
+            }
+            if (Integer.parseInt(x.get(i).getText())<0){
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error !!");
+                alert.setContentText("The Number Is Smaller than Zero !! !!");
                 alert.show();
                 return false;
             }
