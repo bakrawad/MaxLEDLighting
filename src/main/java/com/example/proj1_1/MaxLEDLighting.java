@@ -58,9 +58,11 @@ public class MaxLEDLighting extends Application {
         TextArea AreaDp = new TextArea();
         varea.getChildren().add(AreaDp);
         AreaDp.setMaxSize(400,200);
+        AreaDp.setEditable(false);
         varea.setLayoutX(850);
         varea.setLayoutY(420);
         pane.getChildren().add(varea);
+        varea.setVisible(false);
        // pane.add(varea,80,54);
         Label lbarea = new Label("            The DP Table");
         lbarea.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 15));
@@ -68,6 +70,7 @@ public class MaxLEDLighting extends Application {
         lbarea.setLayoutX(930);
         lbarea.setLayoutY(395);
         pane.getChildren().add(lbarea);
+        lbarea.setVisible(false);
        // pane.add(lbarea,80,53);
 
         //create Label of Result
@@ -77,6 +80,8 @@ public class MaxLEDLighting extends Application {
         Label lbLed = new Label("The Expected LED's ");
         TextArea txExpected = new TextArea();
         TextArea txLed = new TextArea();
+        txLed.setEditable(false);
+        txExpected.setEditable(false);
         lbExpected.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 15));
         lbExpected.setStyle("-fx-text-fill: white;");
         lbLed.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 15));
@@ -89,6 +94,7 @@ public class MaxLEDLighting extends Application {
         txLed.setPrefSize(250,20);
         HBox hBox = new HBox(10);
         hBox.getChildren().addAll(vlabel,vtex);
+        hBox.setVisible(false);
         hBox.setLayoutX(800);
         hBox.setLayoutY(300);
         pane.getChildren().add(hBox);
@@ -139,9 +145,28 @@ public class MaxLEDLighting extends Application {
         imageView.setLayoutY(20);
         paneLed.getChildren().add(imageView);
         pane.getChildren().add(scrollPane);
+        scrollPane.setVisible(false);
+
+        txled.setOnKeyPressed(e ->{
+            if (!ishasInt(e.getText())||Integer.parseInt(e.getText())<0){
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error !!");
+                alert.setContentText("Please Enter a Number !!");
+                alert.show();
+                txled.clear();
+                return;
+            }else {
+                txinp.setText(e.getText());
+            }
+
+
+        });
 
         btadd.setOnAction(e ->{
             paneLed.getChildren().clear();
+            txLed.clear();
+            txExpected.clear();
+            AreaDp.clear();
             if (!ishasInt(txled.getText())||!ishasInt(txinp.getText())){
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Error !!");
@@ -154,6 +179,8 @@ public class MaxLEDLighting extends Application {
 
             int z = Integer.parseInt(txinp.getText());
             int x = Integer.parseInt(txled.getText());
+            txled.clear();
+            txinp.clear();
             if (x==0&&z==0){
                 paneLed.getChildren().add(imageView);
             }
@@ -165,8 +192,17 @@ public class MaxLEDLighting extends Application {
                 txled.clear();
                 txinp.clear();
                 return;
-
             }
+            if (x<0||z<0){
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error !!");
+                alert.setContentText("The Number Is Smaller than Zero !!");
+                alert.show();
+                txled.clear();
+                txinp.clear();
+                return;
+            }
+            scrollPane.setVisible(true);
             Ltxled.clear();
             vtxled.getChildren().clear();
             for (int i = 0 ; i < x ; i++){
@@ -316,6 +352,9 @@ public class MaxLEDLighting extends Application {
             if (!Duplicat(Ltxinp)){//to check if Duplicat
                 return;
             }
+            hBox.setVisible(true);
+            varea.setVisible(true);
+            lbarea.setVisible(true);
 
 
             int x[] = new int[Ltxinp.size()];
@@ -354,25 +393,32 @@ public class MaxLEDLighting extends Application {
             AreaDp.clear();
 
 
-            AreaDp.appendText("        ");
+            AreaDp.appendText("             ");//to print the DP Table
+            AreaDp.appendText("\t");
             for (int i =0;i<y.length;i++){
-                AreaDp.appendText(y[i]+" ");
+                AreaDp.appendText(y[i]+"\t");
             }
             AreaDp.appendText("\n");
-            for (int i =0;i<c.length;i++){ //to print the DP Table
-                AreaDp.appendText(i+"   ");
+            for (int i =0;i<c.length;i++){
+                AreaDp.appendText(i+"\t");
                 for (int j = 0;j<c[i].length;j++){
-                    AreaDp.appendText(c[i][j]+" ");
+                    AreaDp.appendText(c[i][j]+"\t| ");
                 }
                 AreaDp.appendText("\n");
             }
             AreaDp.appendText("\n");
             AreaDp.appendText("__________________________________");
             AreaDp.appendText("\n\n");
-            for (int i =0;i<c.length;i++){//to print the DP Table
-                AreaDp.appendText(i+"   ");
+            AreaDp.appendText("             ");
+            AreaDp.appendText("\t");
+            for (int i =0;i<y.length;i++){
+                AreaDp.appendText(y[i]+"\t");
+            }
+            AreaDp.appendText("\n");
+            for (int i =0;i<c.length;i++){ //to print the DP Table
+                AreaDp.appendText(i+"\t");
                 for (int j = 0;j<c[i].length;j++){
-                    AreaDp.appendText("|"+p[i][j]+"|"+" ");
+                    AreaDp.appendText(p[i][j]+"\t|");
                 }
                 AreaDp.appendText("\n");
             }
@@ -601,6 +647,13 @@ public class MaxLEDLighting extends Application {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Error !!");
                 alert.setContentText("Please put a correct value");
+                alert.show();
+                return false;
+            }
+            if (Integer.parseInt(x.get(i).getText())<0){
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error !!");
+                alert.setContentText("The Number Is Smaller than Zero !! !!");
                 alert.show();
                 return false;
             }
