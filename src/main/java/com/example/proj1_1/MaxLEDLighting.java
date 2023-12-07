@@ -469,14 +469,14 @@ public class MaxLEDLighting extends Application {
             /*
             this to add cooler to the LED's
              */
-            for (int i = 0; i < res.size(); i++) {
+            for (int i = 0; i < res.size(); i++) {//this to color the textField of LED
                 for (int j = 0; j < Ltxled.size(); j++) {
                     if (Integer.parseInt(Ltxled.get(j).getText())==res.get(i)){
                         Ltxled.get(j).setStyle("-fx-background-color: #ffff87;");
                     }
                 }
             }
-            for (int i = 0; i < res.size(); i++) {//this to put LED Left The Input
+            for (int i = 0; i < res.size(); i++) {//this to put LED Left The Input and color the textField
                 for (int j = 0; j < Ltxinp.size(); j++) {
                     if (Integer.parseInt(Ltxinp.get(j).getText())==res.get(i)){
                         double v = Ltxinp.get(j).getLayoutX();
