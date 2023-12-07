@@ -177,7 +177,7 @@ public class MaxLEDLighting extends Application {
         });
         AtomicBoolean flag = new AtomicBoolean(false);
 
-        btadd.setOnAction(e ->{
+        btadd.setOnAction(e ->{ // this button to add textField's
             paneLed.getChildren().clear();
             txLed.clear();
             txExpected.clear();
@@ -380,7 +380,7 @@ public class MaxLEDLighting extends Application {
             int x[] = new int[Ltxinp.size()];
             int y[] = new int [Ltxled.size()];
 
-            for (int i = 0 ; i<Ltxinp.size();i++){
+            for (int i = 0 ; i<Ltxinp.size();i++){ //this for loop to put the value og textfield in array
 
                 x[i]=Integer.parseInt(Ltxinp.get(i).getText());
             }
@@ -388,26 +388,27 @@ public class MaxLEDLighting extends Application {
                 y[i]=Integer.parseInt(Ltxled.get(i).getText());
             }
 
-            int c[][] = LED(x,y);
-            String p[][] = LEDOfDirc(x,y);
+            int c[][] = LED(x,y);//table of Led
+            String p[][] = LEDOfDirc(x,y);//the direct of led
+            ArrayList<Integer> res = result(x, x.length,y.length,p);//array for result
 //            String result[] = result(x,x.length,y.length,p).toString().split("");//to convert the result to String from method
-              ArrayList<Integer> r = r(x, x.length,y.length,p);
+
 //            for (int i = 0;i<result.length;i++){//to convert the string result to array of int
 //                if (result[i].equals(",")&& i == result.length-1){
 //                    break;
 //                }
 //                if (result[i].equals(",")){
-//                    r.add(Integer.parseInt(result[i+1]));
+//                    res.add(Integer.parseInt(result[i+1]));
 //                    i++;
 //                    continue;
 //                }
-//                r.add(Integer.parseInt(result[i]));
+//                res.add(Integer.parseInt(result[i]));
 //            }
 
-            txExpected.setText(r.size()+"");//this to put the expected result into a textarea
+            txExpected.setText(res.size()+"");//this to put the expected result into a textarea
             String led = " ";
-            for (int i = 0 ; i<r.size();i++){//this for loop to print the expected Led's
-                led+=r.get(i)+" | ";
+            for (int i = 0 ; i<res.size();i++){//this for loop to print the expected Led's
+                led+=res.get(i)+" | ";
             }
             txLed.setText(led);
             AreaDp.clear();
@@ -419,7 +420,7 @@ public class MaxLEDLighting extends Application {
                 AreaDp.appendText(y[i]+"\t");
             }
             AreaDp.appendText("\n");
-            for (int i =0;i<c.length;i++){
+            for (int i =0;i<c.length;i++){ //this for loop to print the area dp
                 AreaDp.appendText(i+"\t");
                 for (int j = 0;j<c[i].length;j++){
                     AreaDp.appendText(c[i][j]+"\t| ");
@@ -435,7 +436,7 @@ public class MaxLEDLighting extends Application {
                 AreaDp.appendText(y[i]+"\t");
             }
             AreaDp.appendText("\n");
-            for (int i =0;i<c.length;i++){ //to print the DP Table
+            for (int i =0;i<c.length;i++){ //to print the direct of DP Table
                 AreaDp.appendText(i+"\t");
                 for (int j = 0;j<c[i].length;j++){
                     AreaDp.appendText(p[i][j]+"\t|");
@@ -449,8 +450,8 @@ public class MaxLEDLighting extends Application {
 
             for (int i = 0; i < Ltxinp.size(); i++) {//to start put Lines in the textFild's
                 for (int j = 0; j < Ltxled.size(); j++) {
-                    for (int u = 0; u < r.size(); u++) {
-                        if ((r.get(u) + "").equals(Ltxled.get(j).getText())) {
+                    for (int u = 0; u < res.size(); u++) {
+                        if ((res.get(u) + "").equals(Ltxled.get(j).getText())) {
                             if (Ltxinp.get(i).getText().equals(Ltxled.get(j).getText())) {
                                 Line l = new Line();
                                 l.setStroke(Color.GREEN);
@@ -465,6 +466,33 @@ public class MaxLEDLighting extends Application {
                     }
                 }
             }
+            /*
+            this to add cooler to the LED's
+             */
+            for (int i = 0; i < res.size(); i++) {
+                for (int j = 0; j < Ltxled.size(); j++) {
+                    if (Integer.parseInt(Ltxled.get(j).getText())==res.get(i)){
+                        Ltxled.get(j).setStyle("-fx-background-color: #ffff87;");
+                    }
+                }
+            }
+            for (int i = 0; i < res.size(); i++) {
+                for (int j = 0; j < Ltxinp.size(); j++) {
+                    if (Integer.parseInt(Ltxinp.get(j).getText())==res.get(i)){
+                        double v = Ltxinp.get(j).getLayoutX();
+                        double b = Ltxinp.get(j).getLayoutY();
+                        ImageView img = new ImageView(new Image("LED.png"));
+                        img.setFitHeight(25);
+                        img.setFitWidth(25);
+                        img.setLayoutY(b);
+                        img.setLayoutX(v+50);
+
+                        paneLed.getChildren().add(img);
+                    }
+                }
+            }
+
+
         });
 
         btRandom.setOnAction(e ->{//Button to set Random of Number of Led
@@ -484,18 +512,18 @@ public class MaxLEDLighting extends Application {
             }
             int x = Ltxled.size();
             ArrayList<Integer>ListOfRandom = new ArrayList<>();
-            for (int i = 1; i <= x ; i++) {
+            for (int i = 1; i <= x ; i++) {//to create list of random
                 ListOfRandom.add(i);
             }
             Collections.shuffle(ListOfRandom);
-            for (int i = 0; i < Ltxled.size(); i++) {
+            for (int i = 0; i < Ltxled.size(); i++) {//to print it to TextField led
                 Ltxled.get(i).setText(ListOfRandom.get(i)+"");
             }
         });
 
 
 
-        btRead.setOnAction(e ->{
+        btRead.setOnAction(e ->{//to choose the file
             FileChooser fc = new FileChooser();
             File file = fc.showOpenDialog(stage2);// open stage file chooser
             if (file != null) {
@@ -526,8 +554,8 @@ public class MaxLEDLighting extends Application {
                         }
                     }
 
-                        int m = x.size();
-                        int n = y.size();
+                        int m = x.size();//the number of input
+                        int n = y.size();//the number of led
                         if (m > n){
                             Alert alert = new Alert(Alert.AlertType.ERROR);
                             alert.setTitle("Error !!");
@@ -540,9 +568,9 @@ public class MaxLEDLighting extends Application {
                         txinp.setText(n+"");
                         btadd.fire();
 
-                    for (int i = 0; i < m; i++) {
+                    for (int i = 0; i < m; i++) {//to put the file value in the input textfield
                         Ltxinp.get(i).setText(x.get(i)+"");
-                    }for (int i = 0; i < n; i++) {
+                    }for (int i = 0; i < n; i++) {//to put the file value in the led textfield
                         Ltxled.get(i).setText(y.get(i)+"");
                     }
 
@@ -597,7 +625,6 @@ public class MaxLEDLighting extends Application {
 
         for (int j = 1; j <= n; j++)
             c[0][j] = 0;
-        ;
 
         for (int i = 1; i <= m; i++) {
             for (int j = 1; j <= n; j++) {
@@ -654,7 +681,7 @@ public class MaxLEDLighting extends Application {
         return p;
     }
 
-    private static ArrayList<Integer> r(int x[],int m,int n,String p[][]){//to return the result of expected LED's
+    private static ArrayList<Integer> result(int x[],int m,int n,String p[][]){//to return the result of expected LED's
         ArrayList<Integer> res = new ArrayList<>();
         int i = m;
         int j = n;
