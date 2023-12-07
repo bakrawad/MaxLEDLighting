@@ -476,11 +476,12 @@ public class MaxLEDLighting extends Application {
                     }
                 }
             }
-            for (int i = 0; i < res.size(); i++) {
+            for (int i = 0; i < res.size(); i++) {//this to put LED Left The Input
                 for (int j = 0; j < Ltxinp.size(); j++) {
                     if (Integer.parseInt(Ltxinp.get(j).getText())==res.get(i)){
                         double v = Ltxinp.get(j).getLayoutX();
                         double b = Ltxinp.get(j).getLayoutY();
+                        Ltxinp.get(j).setStyle("-fx-background-color: #ffff87;");
                         ImageView img = new ImageView(new Image("LED.png"));
                         img.setFitHeight(25);
                         img.setFitWidth(25);
