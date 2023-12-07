@@ -182,7 +182,7 @@ public class MaxLEDLighting extends Application {
             txLed.clear();
             txExpected.clear();
             AreaDp.clear();
-            if (!ishasInt(txled.getText())||!ishasInt(txinp.getText())){
+            if (!ishasInt(txled.getText())||!ishasInt(txinp.getText())){//if not enter a number
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Error !!");
                 alert.setContentText("TELLL !!");
@@ -199,7 +199,7 @@ public class MaxLEDLighting extends Application {
             if (x==0&&z==0){
                 paneLed.getChildren().add(imageView);
             }
-            if (x<z){
+            if (x<z){//if number of socket above the led's
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Error !!");
                 alert.setContentText("The Number Of Led Must Be Grater than Input !!");
@@ -208,7 +208,7 @@ public class MaxLEDLighting extends Application {
                 txinp.clear();
                 return;
             }
-            if (x<0||z<0){
+            if (x<0||z<0){//if number smaller than zero
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Error !!");
                 alert.setContentText("The Number Is Smaller than Zero !!");
@@ -222,13 +222,13 @@ public class MaxLEDLighting extends Application {
             Ltxled.clear();
             vtxled.getChildren().clear();
 
-            for (int i = 0 ; i < x ; i++){
+            for (int i = 0 ; i < x ; i++){//to create the textfield of LED's
                 TextField ti = new TextField();
                 ti.setPrefSize(35,35);
                 ti.setMaxWidth(35);
                 ti.setMaxHeight(35);
                 Ltxled.add(ti);
-                flag.set(true);
+                flag.set(true);//set flag true for random button
             }
 
 
@@ -241,7 +241,7 @@ public class MaxLEDLighting extends Application {
 //            vtxinp.setMaxSize(150,150);
 //            pane.getChildren().add(vtxinp);
             double startX_LED = 10, startY_LED = 10;
-            for (int i = 0 ; i < x ; i++){
+            for (int i = 0 ; i < x ; i++){//to center the TextField of LED's
                 Ltxled.get(i).setLayoutX(startX_LED);
                 Ltxled.get(i).setLayoutY(startY_LED);
 
@@ -252,7 +252,7 @@ public class MaxLEDLighting extends Application {
 
             Ltxinp.clear();
             vtxinp.getChildren().clear();
-            for (int i = 0 ; i < z ; i++){
+            for (int i = 0 ; i < z ; i++){//to create the textfield of Input's
                 TextField ti = new TextField();
                 ti.setPrefSize(35,35);
                 ti.setMaxWidth(35);
@@ -262,7 +262,7 @@ public class MaxLEDLighting extends Application {
             }
 
             double startX_INPUT = 210, startY_INPUT = 10;
-            for (int i = 0 ; i < z ; i++){
+            for (int i = 0 ; i < z ; i++){//to center the TextField of input
 
 
                 Ltxinp.get(i).setLayoutX(startX_INPUT);
@@ -272,7 +272,7 @@ public class MaxLEDLighting extends Application {
                 startY_INPUT += 50;
                 //vtxinp.getChildren().add(Ltxinp.get(i));
             }
-            for (int i = 0 ; i < Ltxinp.size() ; i++){
+            for (int i = 0 ; i < Ltxinp.size() ; i++){//to put in the TextFeild of Input Num from 1 to n
                 Ltxinp.get(i).setText(i+1+"");
             }
 
@@ -371,7 +371,7 @@ public class MaxLEDLighting extends Application {
             if (!Duplicat(Ltxinp)){//to check if Duplicat
                 return;
             }
-            flag.set(false);
+            flag.set(false);//set flag false for Random button
             hBox.setVisible(true);
             varea.setVisible(true);
             lbarea.setVisible(true);
@@ -452,7 +452,7 @@ public class MaxLEDLighting extends Application {
                 for (int j = 0; j < Ltxled.size(); j++) {
                     for (int u = 0; u < res.size(); u++) {
                         if ((res.get(u) + "").equals(Ltxled.get(j).getText())) {
-                            if (Ltxinp.get(i).getText().equals(Ltxled.get(j).getText())) {
+                            if (Ltxinp.get(i).getText().equals(Ltxled.get(j).getText().trim())) {
                                 Line l = new Line();
                                 l.setStroke(Color.GREEN);
                                 l.setStrokeWidth(3);
