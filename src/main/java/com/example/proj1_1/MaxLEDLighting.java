@@ -217,6 +217,7 @@ public class MaxLEDLighting extends Application {
             txLed.clear();
             txExpected.clear();
             AreaDp.clear();
+            AreaDp.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 15));
             if (!ishasInt(txled.getText())||!ishasInt(txinp.getText())){//if not enter a number
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Error !!");
