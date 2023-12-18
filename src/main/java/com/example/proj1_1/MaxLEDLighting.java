@@ -55,24 +55,7 @@ public class MaxLEDLighting extends Application {
         vBox1.setLayoutY(500);
         pane.getChildren().add(vBox1);
 
-        //create TextArea DP table
-        VBox varea = new VBox(10);
-        TextArea AreaDp = new TextArea();
-        varea.getChildren().add(AreaDp);
-        AreaDp.setMaxSize(400,200);
-        AreaDp.setEditable(false);
-        varea.setLayoutX(850);
-        varea.setLayoutY(420);
-        pane.getChildren().add(varea);
-        varea.setVisible(false);
-       // pane.add(varea,80,54);
-        Label lbarea = new Label("            The DP Table");
-        lbarea.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 15));
-        lbarea.setStyle("-fx-text-fill: white;");
-        lbarea.setLayoutX(930);
-        lbarea.setLayoutY(395);
-        pane.getChildren().add(lbarea);
-        lbarea.setVisible(false);
+
        // pane.add(lbarea,80,53);
 
         //create Label of Result
@@ -160,6 +143,58 @@ public class MaxLEDLighting extends Application {
         pane.getChildren().add(scrollPane);
         scrollPane.setVisible(false);
 
+
+        //another stage for TextArea
+        Pane pane2 = new Pane();
+        Scene scene2 = new Scene(pane2,700,600);
+        Stage stagee = new Stage();
+        stagee.setScene(scene2);
+        pane2.setBackground(new Background(backgroundImage));
+
+        //create TextArea DP table
+
+        TextArea AreaDp = new TextArea();
+        AreaDp.setMaxSize(400,200);
+        AreaDp.setEditable(false);
+        AreaDp.setLayoutY(70);
+        AreaDp.setLayoutX(20);
+        AreaDp.setPrefSize(1500,500);
+        AreaDp.setMinWidth(660);
+        AreaDp.setMinHeight(400);
+        pane2.getChildren().add(AreaDp);
+        // pane.add(varea,80,54);
+        Label lbarea = new Label("The DP Table");
+        lbarea.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 15));
+        lbarea.setStyle("-fx-text-fill: white;");
+        lbarea.setLayoutX(300);
+        lbarea.setLayoutY(40);
+        pane2.getChildren().add(lbarea);
+
+        Button btClose = new Button("Close");
+        btClose.setStyle("-fx-background-color: #20588d;-fx-text-fill: white;-fx-padding: 10 20;");
+        btClose.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR , 13));
+        btClose.setOnMouseEntered(e -> btClose.setStyle("-fx-background-color: #010a2a; -fx-text-fill: white; -fx-padding: 10 20;"));
+        btClose.setOnMouseExited(e -> btClose.setStyle("-fx-background-color: #20588d;-fx-text-fill: white;-fx-padding: 10 20;"));
+        btClose.setOnAction(e ->{
+            stagee.close();
+        });
+        btClose.setLayoutY(500);
+        btClose.setLayoutX(300);
+        pane2.getChildren().add(btClose);
+
+        //button to open the Stage !
+        Button btTable = new Button("Open Table");
+        btTable.setStyle("-fx-background-color: #20588d;-fx-text-fill: white;-fx-padding: 10 20;");
+        btTable.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR , 13));
+        btTable.setOnMouseEntered(e -> btTable.setStyle("-fx-background-color: #010a2a; -fx-text-fill: white; -fx-padding: 10 20;"));
+        btTable.setOnMouseExited(e -> btTable.setStyle("-fx-background-color: #20588d;-fx-text-fill: white;-fx-padding: 10 20;"));
+        btTable.setLayoutY(400);
+        btTable.setLayoutX(1050);
+        pane.getChildren().add(btTable);
+        btTable.setOnAction(e ->{
+            stagee.show();
+        });
+        btTable.setVisible(false);
         txled.setOnKeyTyped(e ->{
             String s = e.getText();
             if (!ishasInt(txled.getText())||Integer.parseInt(txled.getText())<0){
@@ -185,7 +220,7 @@ public class MaxLEDLighting extends Application {
             if (!ishasInt(txled.getText())||!ishasInt(txinp.getText())){//if not enter a number
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Error !!");
-                alert.setContentText("TELLL !!");
+                alert.setContentText("Please Input A The Led And Input Number !!");
                 alert.show();
                 txled.clear();
                 txinp.clear();
@@ -373,7 +408,7 @@ public class MaxLEDLighting extends Application {
             }
             flag.set(false);//set flag false for Random button
             hBox.setVisible(true);
-            varea.setVisible(true);
+            btTable.setVisible(true);
             lbarea.setVisible(true);
 
 
