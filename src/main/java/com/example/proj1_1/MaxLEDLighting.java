@@ -574,24 +574,19 @@ public class MaxLEDLighting extends Application {
                         String[] data = line.split(",");
 
                         if (z == 1){
-
-                            for (int i = 0;i<data.length;i++){
-
-                                x.add(Integer.parseInt(data[i]));
-                            }
+                            x.add(Integer.parseInt(data[0]));
                             z++;
                             continue;
                         }
                         if (z ==2){
                             for (int i = 0;i<data.length;i++){
-
                                 y.add(Integer.parseInt(data[i]));
                             }
                             break;
                         }
                     }
 
-                        int m = x.size();//the number of input
+                        int m = x.get(0);//the number of input
                         int n = y.size();//the number of led
                         if (m > n){
                             Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -600,18 +595,15 @@ public class MaxLEDLighting extends Application {
                             alert.show();
                             txled.clear();
                             txinp.clear();
+                            return;
                         }
                         txled.setText(m+"");
                         txinp.setText(n+"");
                         btadd.fire();
 
-                    for (int i = 0; i < m; i++) {//to put the file value in the input textfield
-                        Ltxinp.get(i).setText(x.get(i)+"");
-                    }for (int i = 0; i < n; i++) {//to put the file value in the led textfield
+                    for (int i = 0; i < n; i++) {//to put the file value in the led textfield
                         Ltxled.get(i).setText(y.get(i)+"");
                     }
-
-
 
 
                     Alert alert = new Alert(Alert.AlertType.INFORMATION);
